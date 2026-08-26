@@ -77,6 +77,7 @@ export default function Editor({ pageId }: EditorProps) {
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
         link: { openOnClick: false, autolink: true },
+        codeBlock: false,
       }),
       Placeholder.configure({
         placeholder: "Type '/' for commands…  '[[ ' to link a page…",

@@ -2,6 +2,7 @@
 
 import { Extension } from '@tiptap/core';
 import type { Editor, Range } from '@tiptap/core';
+import { PluginKey } from '@tiptap/pm/state';
 import Suggestion, { type SuggestionOptions } from '@tiptap/suggestion';
 import { createSuggestionRender, type MenuItem } from '@/components/editor/SuggestionMenu';
 
@@ -135,6 +136,7 @@ export const SlashMenu = Extension.create<SlashMenuOptions>({
   addProseMirrorPlugins() {
     return [
       Suggestion<MenuItem>({
+        pluginKey: new PluginKey('slashMenu'),
         editor: this.editor,
         char: '/',
         allowSpaces: false,
@@ -180,6 +182,7 @@ export const WikilinkMenu = Extension.create<WikilinkMenuOptions>({
     const getPages = this.options.getPages ?? (() => []);
     return [
       Suggestion<PageRefItem>({
+        pluginKey: new PluginKey('wikilinkMenu'),
         editor: this.editor,
         char: '[[',
         allowSpaces: true,
