@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import type { Page, Space, ViewType } from '@/types';
 import Sidebar from '@/components/Sidebar';
 import NotesView from '@/components/NotesView';
+import SearchView from '@/components/SearchView';
 import GraphView from '@/components/GraphView';
 import StatsView from '@/components/StatsView';
 import TemplatesView from '@/components/TemplatesView';
@@ -244,6 +245,8 @@ export default function AppShell() {
             <StatsView spaces={spaces} pages={pages ?? []} onSelectPage={openPage} />
           ) : view === 'templates' ? (
             <TemplatesView defaultSpaceId={activeSpaceId ?? spaces[0]?.id ?? null} onCreated={openPage} />
+          ) : view === 'search' ? (
+            <SearchView onSelectPage={openPage} />
           ) : view === 'trash' ? (
             <TrashView onRestored={openPage} />
           ) : (
@@ -260,29 +263,17 @@ export default function AppShell() {
           ['graph', 'Graph', Network],
           ['stats', 'Stats', BarChart3],
           ['settings', 'Settings', Settings],
-        ] as [ViewType, string, typeof LayoutGrid][]).map(([v, label, Icon]) =>
-          v === 'search' ? (
-            <button
-              key={v}
-              className="bottom-nav-item"
-              onClick={() => setPaletteOpen(true)}
-              aria-label="Search notes"
-            >
-              <Icon className="bottom-nav-item-icon" size={22} />
-              <span className="bottom-nav-item-label">{label}</span>
-            </button>
-          ) : (
-            <button
-              key={v}
-              className={cn('bottom-nav-item', view === v && 'active')}
-              onClick={() => setView(v)}
-              aria-current={view === v}
-            >
-              <Icon className="bottom-nav-item-icon" size={22} />
-              <span className="bottom-nav-item-label">{label}</span>
-            </button>
-          ),
-        )}
+        ] as [ViewType, string, typeof LayoutGrid][]).map(([v, label, Icon]) => (
+          <button
+            key={v}
+            className={cn('bottom-nav-item', view === v && 'active')}
+            onClick={() => setView(v)}
+            aria-current={view === v ? 'page' : undefined}
+          >
+            <Icon className="bottom-nav-item-icon" size={22} />
+            <span className="bottom-nav-item-label">{label}</span>
+          </button>
+        ))}
       </nav>
 
       {/* Floating new-page button (desktop) */}

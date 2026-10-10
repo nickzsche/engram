@@ -68,6 +68,14 @@ export default function CommandPalette({
         action: () => onNewPage(space.id),
       })),
       {
+        id: 'view-search',
+        title: 'Search all notes',
+        icon: <Search size={16} />,
+        section: 'Go to',
+        keywords: ['search', 'find', 'full text'],
+        action: () => onViewChange('search'),
+      },
+      {
         id: 'view-graph',
         title: 'Open graph view',
         icon: <Network size={16} />,
@@ -174,7 +182,7 @@ export default function CommandPalette({
   return (
     <AnimatePresence>
       {open && (
-        <div className="command-palette" role="dialog" aria-label="Command palette">
+        <div className="command-palette" role="dialog" aria-modal="true" aria-label="Command palette">
           <motion.div
             className="command-palette-backdrop"
             initial={{ opacity: 0 }}

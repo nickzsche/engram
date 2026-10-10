@@ -12,6 +12,7 @@ import {
   Plus,
   Trash2,
   Settings,
+  Search,
   Sparkles,
   X,
 } from 'lucide-react';
@@ -215,6 +216,7 @@ export default function Sidebar({
       {/* Footer utilities */}
       <div className="border-t border-ink-800/60 p-3">
         {([
+          ['search', 'Search', Search],
           ['templates', 'Templates', Layers],
           ['stats', 'Writing stats', Sparkles],
           ['trash', 'Trash', Trash2],
