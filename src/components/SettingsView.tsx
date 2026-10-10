@@ -157,7 +157,7 @@ export default function SettingsView() {
 
       <footer className="mt-8 flex items-center gap-2 pb-6 text-xs text-ink-500">
         <Sparkles size={13} className="text-accent-violet" />
-        ENGRAM v1.0 · local-first · MIT licensed · Midnight Ink theme
+        ENGRAM v1.0 · local-first · Midnight Ink theme
       </footer>
     </div>
   );
