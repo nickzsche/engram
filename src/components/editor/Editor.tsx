@@ -60,6 +60,7 @@ export default function Editor({ pageId }: EditorProps) {
   const [tagDraft, setTagDraft] = useState('');
   const pagesRef = useRef<{ id: string; title: string; spaceName?: string }[]>([]);
   const loadedPageRef = useRef<string | null>(null);
+  const pendingSaveRef = useRef<Record<string, unknown> | null>(null);
 
   const space = useMemo(() => spaces?.find((s) => s.id === page?.spaceId) ?? null, [spaces, page]);
 
@@ -122,9 +123,11 @@ export default function Editor({ pageId }: EditorProps) {
       },
     },
     onUpdate: ({ editor: ed }) => {
+      const json = ed.getJSON();
+      pendingSaveRef.current = json;
       setSaveState('dirty');
-      setWords(countWordsInDoc(ed.getJSON()));
-      debouncedSave(ed.getJSON());
+      setWords(countWordsInDoc(json));
+      debouncedSave(json);
     },
   });
 
@@ -133,8 +136,16 @@ export default function Editor({ pageId }: EditorProps) {
       debounce(async (json: Record<string, unknown>) => {
         if (!pageId) return;
         setSaveState('saving');
-        await savePageContent(pageId, JSON.stringify(json));
-        setSaveState('saved');
+        try {
+          await savePageContent(pageId, JSON.stringify(json));
+          // Only clear if no newer edit landed while this write was in flight.
+          if (pendingSaveRef.current === json) pendingSaveRef.current = null;
+          setSaveState('saved');
+        } catch (err) {
+          console.error('ENGRAM: failed to save note', err);
+          setSaveState('dirty');
+          toastBus.error('Could not save — your browser storage may be full or blocked');
+        }
       }, 600),
     [pageId],
   );
@@ -154,7 +165,20 @@ export default function Editor({ pageId }: EditorProps) {
     setSaveState('saved');
   }, [editor, page, pageId]);
 
-  useEffect(() => () => debouncedSave.cancel(), [debouncedSave]);
+  // Flush any pending write before the editor unmounts (page switch) — cancelling
+  // alone would drop edits made in the trailing debounce window.
+  useEffect(
+    () => () => {
+      debouncedSave.cancel();
+      const pending = pendingSaveRef.current;
+      if (pending && pageId) {
+        void savePageContent(pageId, JSON.stringify(pending)).catch(() => {
+          /* nothing actionable during teardown */
+        });
+      }
+    },
+    [debouncedSave, pageId],
+  );
 
   // Live-update sidebar when the title changes
   const commitTitle = async (value: string) => {
@@ -273,6 +297,7 @@ export default function Editor({ pageId }: EditorProps) {
           <input
             className="mb-2 w-full bg-transparent font-display text-3xl font-bold text-ink-100 outline-none placeholder:text-ink-600 md:text-4xl"
             placeholder="Untitled"
+            aria-label="Note title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onBlur={() => {
@@ -308,6 +333,7 @@ export default function Editor({ pageId }: EditorProps) {
             <input
               className="w-28 bg-transparent text-xs text-ink-300 outline-none placeholder:text-ink-600"
               placeholder="+ tag"
+              aria-label="Add tag"
               value={tagDraft}
               onChange={(e) => setTagDraft(e.target.value)}
               onKeyDown={(e) => {
