@@ -41,9 +41,10 @@ export function buildGraphData(pages: Page[], spaceColorById: Map<string, string
     }
   }
 
-  const maxWords = Math.max(1, ...live.map((p) => countWordsInDoc(p.content)));
+  const wordsById = new Map(live.map((p) => [p.id, countWordsInDoc(p.content)]));
+  const maxWords = Math.max(1, ...wordsById.values());
   const nodes: GraphNode[] = live.map((page) => {
-    const words = countWordsInDoc(page.content);
+    const words = wordsById.get(page.id) ?? 0;
     return {
       id: page.id,
       title: page.title || 'Untitled',

@@ -25,10 +25,11 @@ export default function GraphView({ spaces, pages, onSelectPage }: GraphViewProp
     lastY: 0,
     moved: false,
   });
-  const [hovered, setHovered] = useState<GraphNode | null>(null);
   const [ready, setReady] = useState(false);
+  const hoveredRef = useRef<GraphNode | null>(null);
 
   const spaceColorById = useMemo(() => new Map(spaces.map((s) => [s.id, s.color])), [spaces]);
+  const liveCount = useMemo(() => pages.filter((p) => !p.isTrashed).length, [pages]);
 
   // (Re)build graph data when pages change
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function GraphView({ spaces, pages, onSelectPage }: GraphViewProp
         const y = cy + n.y * view.zoom;
         const r = n.radius * view.zoom;
 
-        if (n.isFavorite || hovered?.id === n.id) {
+        if (n.isFavorite || hoveredRef.current?.id === n.id) {
           ctx.beginPath();
           ctx.arc(x, y, r + 4, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(168, 85, 247, 0.18)';
@@ -132,7 +133,7 @@ export default function GraphView({ spaces, pages, onSelectPage }: GraphViewProp
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
     };
-  }, [hovered]);
+  }, []);
 
   const hitTest = (clientX: number, clientY: number): GraphNode | null => {
     const canvas = canvasRef.current;
@@ -163,6 +164,8 @@ export default function GraphView({ spaces, pages, onSelectPage }: GraphViewProp
       <canvas
         ref={canvasRef}
         className="graph-canvas"
+        role="img"
+        aria-label={`Knowledge graph of ${liveCount} notes linked by hierarchy and wikilinks. Drag to pan, scroll to zoom, click a node to open it.`}
         onPointerDown={(e) => {
           const node = hitTest(e.clientX, e.clientY);
           dragRef.current = { node, panning: !node, lastX: e.clientX, lastY: e.clientY, moved: false };
@@ -181,7 +184,7 @@ export default function GraphView({ spaces, pages, onSelectPage }: GraphViewProp
             viewRef.current.y += dy;
             drag.moved = true;
           } else {
-            setHovered(hitTest(e.clientX, e.clientY));
+            hoveredRef.current = hitTest(e.clientX, e.clientY);
             return;
           }
           drag.lastX = e.clientX;
