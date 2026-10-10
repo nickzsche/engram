@@ -1,11 +1,28 @@
 import type { JSONContent } from '@tiptap/react';
 
+type Inline = JSONContent | string;
+
+/** Coerce a string into a TipTap text node; pass inline nodes through untouched. */
+const inline = (node: Inline): JSONContent =>
+  typeof node === 'string' ? { type: 'text', text: node } : node;
+
 /** Tiny helpers for building TipTap JSON documents concisely. */
 export const t = {
   doc: (...content: JSONContent[]): JSONContent => ({ type: 'doc', content }),
   p: (text?: string): JSONContent => ({
     type: 'paragraph',
     content: text ? [{ type: 'text', text }] : undefined,
+  }),
+  /** A paragraph mixing plain strings and inline nodes (e.g. wikilinks). */
+  p2: (...parts: Inline[]): JSONContent => ({
+    type: 'paragraph',
+    content: parts.map(inline),
+  }),
+  /** Inline `[[title]]` link mark that backlinks & the graph can resolve. */
+  wikilink: (text: string, pageId: string): JSONContent => ({
+    type: 'text',
+    text,
+    marks: [{ type: 'wikilink', attrs: { pageId, title: text } }],
   }),
   h: (level: 1 | 2 | 3, text: string): JSONContent => ({
     type: 'heading',

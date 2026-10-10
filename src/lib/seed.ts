@@ -53,7 +53,7 @@ export async function ensureSeedData(): Promise<void> {
       content: JSON.stringify(
         tt.doc(
           tt.h(1, 'Welcome to ENGRAM'),
-          tt.p('This is your local-first notebook. Everything you write lives in your browser\u2019s IndexedDB \u2014 no accounts, no servers, works offline.'),
+          tt.p('This is your local-first notebook. Everything you write lives in your browser’s IndexedDB — no accounts, no servers, works offline.'),
           tt.h(2, 'Quick start'),
           tt.tasks([
             { done: true, text: 'Open the command palette with Ctrl+K' },
@@ -62,9 +62,14 @@ export async function ensureSeedData(): Promise<void> {
             { done: false, text: 'Install it as an app from your browser menu' },
           ]),
           tt.h(2, 'Linking pages'),
-          tt.p('Notes connect like a second brain. Try visiting ', ),
-          tt.p(''),
-          tt.quote('An engram is a unit of cognitive memory imprinted in a neural substance \u2014 this app keeps yours on your own hardware.'),
+          tt.p2(
+            'Notes connect like a second brain. Start with ',
+            tt.wikilink('Why local-first?', 'pg-philosophy'),
+            ', then skim the ',
+            tt.wikilink('Q3 roadmap', 'pg-q3-roadmap'),
+            ' to see links, backlinks and the graph in action.',
+          ),
+          tt.quote('An engram is a unit of cognitive memory imprinted in a neural substance — this app keeps yours on your own hardware.'),
         ),
       ),
     },
@@ -90,7 +95,13 @@ export async function ensureSeedData(): Promise<void> {
             'Longevity: plain JSON you can export any time from Settings.',
           ]),
           tt.divider(),
-          tt.p('Related: see [[Welcome to ENGRAM]] for the tour, or skim the [[Q3 roadmap]] for how we work.'),
+          tt.p2(
+            'Related: see ',
+            tt.wikilink('Welcome to ENGRAM', 'pg-welcome'),
+            ' for the tour, or skim the ',
+            tt.wikilink('Q3 roadmap', 'pg-q3-roadmap'),
+            ' for how we work.',
+          ),
         ),
       ),
     },
@@ -137,7 +148,7 @@ export async function ensureSeedData(): Promise<void> {
           ]),
           tt.h(3, 'Principles'),
           tt.bullet(['Local-first by default', 'Fast on cheap hardware', 'Keyboard-first UX']),
-          tt.p('Kickoff deck notes live in [[Design offsite 2026]].'),
+          tt.p2('Kickoff deck notes live in ', tt.wikilink('Design offsite 2026', 'pg-offsite'), '.'),
         ),
       ),
     },
@@ -158,7 +169,7 @@ export async function ensureSeedData(): Promise<void> {
           tt.h(2, 'Offsite decisions'),
           tt.bullet(['Midnight Ink stays the default theme', 'Ship PWA install prompt after first save', 'Cut feature scope, not quality']),
           tt.code('ts', 'const theme = {\n  background: "#0b0e14",\n  accent: ["#a855f7", "#22d3ee"],\n} as const;'),
-          tt.p('Follow-ups tracked in [[Q3 roadmap]].'),
+          tt.p2('Follow-ups tracked in ', tt.wikilink('Q3 roadmap', 'pg-q3-roadmap'), '.'),
         ),
       ),
     },
@@ -200,7 +211,7 @@ export async function ensureSeedData(): Promise<void> {
       content: JSON.stringify(
         tt.doc(
           tt.h(2, 'Idea: ambient soundscape timer'),
-          tt.p('A focus timer where the soundscape evolves with your session length \u2014 rain intensifies as you near deep-work threshold. Pair with [[Pomodoro, reconsidered]].'),
+          tt.p2('A focus timer where the soundscape evolves with your session length — rain intensifies as you near deep-work threshold. Pair with ', tt.wikilink('Pomodoro, reconsidered', 'pg-pomodoro'), '.'),
         ),
       ),
     },
@@ -220,7 +231,7 @@ export async function ensureSeedData(): Promise<void> {
         tt.doc(
           tt.h(2, 'Pomodoro, reconsidered'),
           tt.quote('Timers measure anxiety better than attention.'),
-          tt.p('What if sessions ended when the task reached a natural checkpoint instead of an arbitrary bell? Notes in [[Ambient soundscape timer]].'),
+          tt.p2('What if sessions ended when the task reached a natural checkpoint instead of an arbitrary bell? Notes in ', tt.wikilink('Ambient soundscape timer', 'pg-app-idea'), '.'),
         ),
       ),
     },
@@ -239,8 +250,8 @@ export async function ensureSeedData(): Promise<void> {
       content: JSON.stringify(
         tt.doc(
           tt.h(2, 'Tools for thinking'),
-          tt.bullet(['Writing is compressed thinking', 'Links are cheap; reviews are expensive', 'A note that can\u2019t be found is a diary']),
-          tt.p('ENGRAM\u2019s [[Why local-first?]] stance shapes all of these.'),
+          tt.bullet(['Writing is compressed thinking', 'Links are cheap; reviews are expensive', 'A note that can’t be found is a diary']),
+          tt.p2('ENGRAM’s ', tt.wikilink('Why local-first?', 'pg-philosophy'), ' stance shapes all of these.'),
         ),
       ),
     },
@@ -281,7 +292,7 @@ export async function ensureSeedData(): Promise<void> {
         tt.doc(
           tt.h(2, 'Local-first software (essay)'),
           tt.quote('We should expect more from our applications: speed, privacy, and multi-device support by default.'),
-          tt.p('The seven ideals map neatly onto ENGRAM \u2014 see [[Why local-first?]].'),
+          tt.p2('The seven ideals map neatly onto ENGRAM — see ', tt.wikilink('Why local-first?', 'pg-philosophy'), '.'),
         ),
       ),
     },
@@ -297,7 +308,7 @@ export async function ensureSeedData(): Promise<void> {
       createdAt: now - 45 * DAY,
       updatedAt: now - 15 * DAY,
       lastEditedAt: now - 15 * DAY,
-      content: JSON.stringify(tt.doc(tt.p('A draft that was moved to trash \u2014 restore it from Trash.'))),
+      content: JSON.stringify(tt.doc(tt.p('A draft that was moved to trash — restore it from Trash.'))),
     },
   ];
 
