@@ -143,12 +143,3 @@ export interface Toast {
   message: string;
   duration?: number;
 }
-
-// Editor state
-export interface EditorState {
-  content: string;
-  wordCount: number;
-  readingTime: number;
-  isDirty: boolean;
-  lastSaved: number | null;
-}
