@@ -40,8 +40,13 @@ Other scripts:
 
 ```bash
 npm run typecheck # tsc --noEmit
+npm test          # unit tests via `bun test` (requires Bun; no extra deps)
 npm run icons     # regenerate PWA PNG icons (pure Node, no deps)
 ```
+
+Tests cover the pure logic in `src/lib` — text/word counting, wikilink extraction,
+search ranking & highlighting, graph edges, and writing stats. They use Bun's
+built-in test runner, so no test framework is installed.
 
 First launch seeds a small set of demo spaces and notes so nothing is empty. They already contain real wikilinks, so backlinks and the graph are populated from the first minute. Delete them whenever you like — or wipe everything from **Settings → Danger zone**. Seeding only ever runs once and never overwrites existing data.
 
